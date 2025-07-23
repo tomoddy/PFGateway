@@ -1,9 +1,38 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
-
-<div class="container-lg">
-
-</div>
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Protocol</th>
+            <th scope="col">Device</th>
+            <th scope="col">Local IP</th>
+            <th scope="col">Local Port</th>
+            <th scope="col">WAN IP</th>
+            <th scope="col">WAN Port</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PortFoward portFoward in Model.PortForwards.OrderBy(pF => pF.WANPort))
+        {
+            <tr>
+                @if (portFoward.Address is not null)
+                {
+                    <th scope="row"><a class="link-light" href="@portFoward.Address">@portFoward.Name</a></th>
+                }
+                else
+                {
+                    <th scope="row">@portFoward.Name</th>
+                }
+                <td>@portFoward.Type</td>
+                <td>@portFoward.Protocol</td>
+                <td>@portFoward.Device</td>
+                <td>@portFoward.LocalIP</td>
+                <td>@portFoward.LocalPort</td>
+                <td>@portFoward.WANIP</td>
+                <td>@portFoward.WANPort</td>
+            </tr>
+        }
+    </tbody>
+</table>

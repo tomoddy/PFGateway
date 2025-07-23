@@ -1,20 +1,18 @@
-using Microsoft.AspNetCore.Mvc;
+using CsvHelper;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Globalization;
 
 namespace PFGateway.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel(IConfiguration configuration) : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly CsvReader CsvReader = new(new StreamReader(configuration["DatabasePath"]!), CultureInfo.InvariantCulture);
 
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
+        public List<PortFoward> PortForwards { get; set; } = [];
 
         public void OnGet()
         {
-
+            PortForwards = [.. CsvReader.GetRecords<PortFoward>()];
         }
     }
 }
