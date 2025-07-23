@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36301.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFGateway", "PFGateway\PFGateway.csproj", "{DF1D2F94-CE3B-4AF7-B20E-E0A6FA47F397}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF1D2F94-CE3B-4AF7-B20E-E0A6FA47F397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF1D2F94-CE3B-4AF7-B20E-E0A6FA47F397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF1D2F94-CE3B-4AF7-B20E-E0A6FA47F397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF1D2F94-CE3B-4AF7-B20E-E0A6FA47F397}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EADE8434-E4E2-4CF5-9A3D-BB9994D0990C}
+	EndGlobalSection
+EndGlobal
