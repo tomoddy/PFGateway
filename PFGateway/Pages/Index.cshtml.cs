@@ -8,11 +8,11 @@ namespace PFGateway.Pages
     {
         private readonly CsvReader CsvReader = new(new StreamReader(configuration["DatabasePath"]!), CultureInfo.InvariantCulture);
 
-        public List<PortFoward> PortForwards { get; set; } = [];
+        public List<PortForward> PortForwards { get; set; } = [];
 
         public void OnGet()
         {
-            PortForwards = [.. CsvReader.GetRecords<PortFoward>()];
+            PortForwards = [.. CsvReader.GetRecords<PortForward>()];
         }
     }
 }

@@ -6,32 +6,33 @@
             <th scope="col">Name</th>
             <th scope="col">Type</th>
             <th scope="col">Protocol</th>
+            <th scope="col">Address</th>
             <th scope="col">Device</th>
             <th scope="col">Local IP</th>
             <th scope="col">Local Port</th>
-            <th scope="col">WAN IP</th>
             <th scope="col">WAN Port</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (PortFoward portFoward in Model.PortForwards.OrderBy(pF => pF.WANPort))
+        @foreach (PortForward portForward in Model.PortForwards.OrderBy(pF => pF.WANPort))
         {
             <tr>
-                @if (portFoward.Address is not null)
+
+                <th scope="row">@portForward.Name</th>
+                <td>@portForward.Type</td>
+                <td>@portForward.Protocol</td>
+                @if (portForward.Type == "Website" && !string.IsNullOrEmpty(portForward.Address))
                 {
-                    <th scope="row"><a class="link-light" href="@portFoward.Address">@portFoward.Name</a></th>
+                    <th scope="row"><a class="link-light" href="@(portForward.Protocol)://@(portForward.Address)">@portForward.Address</a></th>
                 }
                 else
                 {
-                    <th scope="row">@portFoward.Name</th>
+                    <td>@portForward.Address</td>
                 }
-                <td>@portFoward.Type</td>
-                <td>@portFoward.Protocol</td>
-                <td>@portFoward.Device</td>
-                <td>@portFoward.LocalIP</td>
-                <td>@portFoward.LocalPort</td>
-                <td>@portFoward.WANIP</td>
-                <td>@portFoward.WANPort</td>
+                <td>@portForward.Device</td>
+                <td>@portForward.LocalIP</td>
+                <td>@portForward.LocalPort</td>
+                <td>@portForward.WANPort</td>
             </tr>
         }
     </tbody>
