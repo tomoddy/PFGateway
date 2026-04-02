@@ -4,6 +4,7 @@
     <thead>
         <tr>
             <th scope="col">Name</th>
+            <th scope="col">Status</th>
             <th scope="col">Type</th>
             <th scope="col">Protocol</th>
             <th scope="col">Address</th>
@@ -19,15 +20,32 @@
             <tr>
 
                 <th scope="row">@portForward.Name</th>
+                @switch (@portForward.Accessible)
+                {
+                    case -1:
+                        <td><img class="status-icon" src="~/offline.png" /></td>
+                        break;
+                    case 0:
+                        <td><img class="status-icon" src="~/na.png" /></td>
+                        break;
+                    case 1:
+                        <td><img class="status-icon" src="~/online.png" /></td>
+                        break;
+                }
                 <td>@portForward.Type</td>
                 <td>@portForward.Protocol</td>
-                @if (portForward.Type == "Website" && !string.IsNullOrEmpty(portForward.Address))
-                {
-                    <th scope="row"><a class="link-light" href="@(portForward.Protocol)://@(portForward.Address)">@portForward.Address</a></th>
-                }
+                @if (!string.IsNullOrEmpty(portForward.Address))
+                    if (portForward.Protocol is not null && portForward.Protocol.StartsWith("HTTP"))
+                    {
+                        <td><a class="link-light" href="@(portForward.Protocol)://@(portForward.Address)">@portForward.Address</a></td>
+                    }
+                    else
+                    {
+                        <td>@portForward.Address</td>
+                    }
                 else
                 {
-                    <td>@portForward.Address</td>
+                    <td>N/A</td>
                 }
                 <td>@portForward.Device</td>
                 <td>@portForward.LocalIP</td>
