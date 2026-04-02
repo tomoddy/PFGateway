@@ -1,4 +1,6 @@
-﻿namespace PFGateway
+﻿using CsvHelper.Configuration.Attributes;
+
+namespace PFGateway
 {
     public class PortForward
     {
@@ -18,17 +20,7 @@
 
         public string? Protocol { get; set; }
 
-        public int Accessible
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(Protocol))
-                    return -1;
-                else if (!Protocol.StartsWith("HTTP"))
-                    return 0;
-                else
-                    return new HttpClient().GetAsync($"{Protocol.ToLowerInvariant()}://{Address}").Result.IsSuccessStatusCode ? 1 : -1;
-            }
-        }
+        [Ignore]
+        public int Accessible { get; set; }
     }
 }

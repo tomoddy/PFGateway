@@ -4,15 +4,24 @@ using System.Globalization;
 
 namespace PFGateway.Pages
 {
-    public class IndexModel(IConfiguration configuration) : PageModel
+    public class IndexModel(IConfiguration configuration, AccessChecker accessChecker) : PageModel
     {
-        private readonly CsvReader CsvReader = new(new StreamReader(configuration["DatabasePath"]!), CultureInfo.InvariantCulture);
+        private readonly IConfiguration Configuration = configuration;
+        private readonly AccessChecker AccessChecker = accessChecker;
 
         public List<PortForward> PortForwards { get; set; } = [];
 
-        public void OnGet()
+        public async Task OnGetAsync(CancellationToken ct)
         {
-            PortForwards = [.. CsvReader.GetRecords<PortForward>()];
+            using var reader = new StreamReader(Configuration["DatabasePath"]!);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            PortForwards = [.. csv.GetRecords<PortForward>()];
+
+            await Task.WhenAll(PortForwards.Select(async portForward =>
+            {
+                portForward.Accessible = await AccessChecker.GetAccessibleAsync(portForward, ct);
+            }));
         }
     }
 }

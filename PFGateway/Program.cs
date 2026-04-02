@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.HttpOverrides;
+using PFGateway;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddHttpClient<AccessChecker>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(2);
+});
 
 var app = builder.Build();
 
