@@ -15,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (PortForward portForward in Model.PortForwards.OrderBy(pF => pF.WANPort))
+        @foreach (PortForward portForward in Model.PortForwards.OrderBy(pF => pF.WANPort).OrderByDescending(pF => pF.Accessible))
         {
             <tr>
 
