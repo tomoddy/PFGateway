@@ -22,12 +22,13 @@
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(Protocol))
-                    return -1;
-                else if (!Protocol.StartsWith("HTTP"))
-                    return 0;
-                else
-                    return new HttpClient().GetAsync($"{Protocol.ToLowerInvariant()}://{Address}").Result.IsSuccessStatusCode ? 1 : -1;
+                return -1;
+                //if (string.IsNullOrWhiteSpace(Protocol))
+                //    return -1;
+                //else if (!Protocol.StartsWith("HTTP"))
+                //    return 0;
+                //else
+                //    return new HttpClient().GetAsync($"{Protocol.ToLowerInvariant()}://{Address}").Result.IsSuccessStatusCode ? 1 : -1;
             }
         }
     }
