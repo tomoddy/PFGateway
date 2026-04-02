@@ -17,8 +17,9 @@ namespace PFGateway.Pages
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
             PortForwards = [.. csv.GetRecords<PortForward>()];
+            PortForwards.Where(pf => pf.Name == "PFGateway").First().Accessible = 1;
 
-            await Task.WhenAll(PortForwards.Select(async portForward =>
+            await Task.WhenAll(PortForwards.Where(pf => pf.Name != "PFGateway").Select(async portForward =>
             {
                 portForward.Accessible = await AccessChecker.GetAccessibleAsync(portForward, ct);
             }));
