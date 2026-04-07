@@ -16,6 +16,10 @@
             {
                 var url = $"{portForward.Protocol.ToLowerInvariant()}://{portForward.Address}";
                 var response = await HttpClient.GetAsync(url, ct);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    return 1;
+
                 return response.IsSuccessStatusCode ? 1 : -1;
             }
             catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
