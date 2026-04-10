@@ -37,7 +37,7 @@
                 @if (!string.IsNullOrEmpty(portForward.Address))
                     if (portForward.Protocol is not null && portForward.Protocol.StartsWith("HTTP"))
                     {
-                        <td><a class="link-light" href="@(portForward.Protocol)://@(portForward.Address)">@portForward.Address</a></td>
+                        <td><a class="link-light" href="@(portForward.Protocol)://@(portForward.Address)" target="_blank">@portForward.Address</a></td>
                     }
                     else
                     {
