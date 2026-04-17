@@ -1,57 +1,104 @@
 ﻿@page
 @model IndexModel
-<table class="table table-dark table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Type</th>
-            <th scope="col">Protocol</th>
-            <th scope="col">Address</th>
-            <th scope="col">Device</th>
-            <th scope="col">Local IP</th>
-            <th scope="col">Local Port</th>
-            <th scope="col">WAN Port</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (PortForward portForward in Model.PortForwards.OrderBy(pF => pF.WANPort).OrderByDescending(pF => pF.Accessible))
-        {
+<div class="pf-wrapper">
+    <table class="pf-table">
+        <thead>
             <tr>
-
-                <th scope="row">@portForward.Name</th>
-                @switch (@portForward.Accessible)
-                {
-                    case -1:
-                        <td><img class="status-icon" src="~/offline.png" /></td>
-                        break;
-                    case 0:
-                        <td><img class="status-icon" src="~/na.png" /></td>
-                        break;
-                    case 1:
-                        <td><img class="status-icon" src="~/online.png" /></td>
-                        break;
-                }
-                <td>@portForward.Type</td>
-                <td>@portForward.Protocol</td>
-                @if (!string.IsNullOrEmpty(portForward.Address))
-                    if (portForward.Protocol is not null && portForward.Protocol.StartsWith("HTTP"))
-                    {
-                        <td><a class="link-light" href="@(portForward.Protocol)://@(portForward.Address)" target="_blank">@portForward.Address</a></td>
-                    }
-                    else
-                    {
-                        <td>@portForward.Address</td>
-                    }
-                else
-                {
-                    <td>N/A</td>
-                }
-                <td>@portForward.Device</td>
-                <td>@portForward.LocalIP</td>
-                <td>@portForward.LocalPort</td>
-                <td>@portForward.WANPort</td>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Address</th>
+                <th class="expand-col"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (PortForward portForward in Model.PortForwards.OrderBy(pF => pF.WANPort).OrderByDescending(pF => pF.Accessible))
+            {
+                var rowId = Guid.NewGuid().ToString("N");
+                <tr class="pf-row" data-row="@rowId">
+                    <td class="cell-name">@portForward.Name</td>
+                    <td class="cell-status">
+                        @switch (portForward.Accessible)
+                        {
+                            case -1:
+                                <img class="status-icon" src="~/offline.png" alt="Offline" />
+                                break;
+                            case 0:
+                                <img class="status-icon" src="~/na.png" alt="N/A" />
+                                break;
+                            case 1:
+                                <img class="status-icon" src="~/online.png" alt="Online" />
+                                break;
+                        }
+                    </td>
+                    <td class="cell-type">@portForward.Type</td>
+                    <td class="cell-addr">
+                        @if (!string.IsNullOrEmpty(portForward.Address))
+                        {
+                            if (portForward.Protocol is not null && portForward.Protocol.StartsWith("HTTP"))
+                            {
+                                <a class="addr-link" href="@(portForward.Protocol)://@(portForward.Address)" target="_blank">@portForward.Address</a>
+                            }
+                            else
+                            {
+                                @portForward.Address
+                            }
+                        }
+                        else
+                        {
+                            <span class="na">N/A</span>
+                        }
+                    </td>
+                    <td class="expand-col">
+                        <button class="expand-btn" aria-expanded="false" aria-controls="details-@rowId" aria-label="Show details">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path class="chevron-path" d="M2 4.5L7 9.5L12 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+                <tr class="pf-details-row" id="details-@rowId" hidden>
+                    <td colspan="5">
+                        <dl class="details-grid">
+                            <div class="detail-item">
+                                <dt>Protocol</dt>
+                                <dd>@(portForward.Protocol ?? "—")</dd>
+                            </div>
+                            <div class="detail-item">
+                                <dt>Device</dt>
+                                <dd>@(portForward.Device ?? "—")</dd>
+                            </div>
+                            <div class="detail-item">
+                                <dt>Local IP</dt>
+                                <dd>@(portForward.LocalIP ?? "—")</dd>
+                            </div>
+                            <div class="detail-item">
+                                <dt>Local Port</dt>
+                                <dd>@(portForward.LocalPort.ToString() ?? "—")</dd>
+                            </div>
+                            <div class="detail-item">
+                                <dt>WAN Port</dt>
+                                <dd>@(portForward.WANPort.ToString() ?? "—")</dd>
+                            </div>
+                        </dl>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const row = btn.closest('.pf-row');
+            const detailsId = btn.getAttribute('aria-controls');
+            const detailsRow = document.getElementById(detailsId);
+            const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+            btn.setAttribute('aria-expanded', String(!isOpen));
+            detailsRow.hidden = isOpen;
+            row.classList.toggle('is-open', !isOpen);
+        });
+    });
+</script>
